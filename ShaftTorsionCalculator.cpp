@@ -13,7 +13,8 @@ struct Section {
     double L;           // длина, м
     double G;           // модуль сдвига, Па
     double M0;          // момент на начале участка, Н·м
-    double m;           // распределённый момент, Нм/м
+    double m; 
+    double M_end;
 
     // Параметры сечения:
     double d;  // для круга (диаметр) и трубы (внутренний диаметр)
@@ -46,7 +47,7 @@ struct Section {
         }
         else if (shape == "rectangle") {
             // для прямоугольника r = b/2, 
-            return b / 2.0;
+            return 0.5 * std::sqrt(a * a + b * b);
         }
         else if (shape == "tube") {
             return D / 2.0;
@@ -66,10 +67,10 @@ struct Section {
         return J / r;
     }
 
-    // Угол закручивания φ = M0·L/(G·J) - m·L²/(2·G·J) (рад)
+    // Угол закручивания φ = M_end·L/(G·J)
     double twistAngle() const {
         double J = inertiaMoment();
-        return (M0 * L) / (G * J) - (m * L * L) / (2.0 * G * J);
+        return (M_end * L) / (G*pow(10, 6) * (J * 1e8 )*pow(10,-8));
     }
 };
 
@@ -129,8 +130,10 @@ int main() {
         std::cout << "Enter start moment M0 (N·m): ";
         std::cin >> s.M0;
 
-        std::cout << "Enter distributed moment m (N·m/m) (0 if none): ";
-        std::cin >> s.m;
+        std::cout << "Enter end moment M_L (N·m) (use negative for 'from yourself'): ";
+        std::cin >> s.M_end;
+
+        s.m = (s.M0 - s.M_end) / s.L;
         std::cin.ignore();
 
         sections.push_back(s);
@@ -149,8 +152,8 @@ int main() {
 
         std::cout << "\nSection #" << (i + 1) << ":\n";
         std::cout << "  Shape                : " << s.shape << "\n";
-        std::cout << "  Polar moment J       = " << J << " m^4\n";
-        std::cout << "  Section modulus W    = " << W << " m^3\n";
+        std::cout << "  Interia moment J     = " << J*1e8 << " m^4\n";
+        std::cout << "  Section modulus W    = " << W*1e6 << " m^3\n";
         std::cout << "  Moment at start M0   = " << s.M0 << " N·m\n";
         std::cout << "  Moment at end M(L)   = " << M_end << " N·m\n";
         std::cout << "  Twist angle          = " << phi << " rad\n";
