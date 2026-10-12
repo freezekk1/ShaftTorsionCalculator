@@ -35,44 +35,7 @@
 
 `C++17` · `CMake ≥ 3.16` · `Qt 5/6 Widgets` · `QPainter` · `CTest`
 
-## Сборка
 
-Нужны компилятор с поддержкой C++17 и CMake. Для графиков необходим Qt Widgets.
-
-```bash
-cmake -S . -B build -DWITH_QT=ON
-cmake --build build --config Release
-```
-
-Чтобы собрать только консольную версию без Qt:
-
-```bash
-cmake -S . -B build-console -DWITH_QT=OFF
-cmake --build build-console --config Release
-```
-
-По умолчанию `WITH_QT=AUTO`: при обнаружении Qt подключается графическая часть, иначе собирается консольная версия. В Windows приложение можно запускать из каталога конфигурации (`build/Release/` для многоконфигурационных генераторов); в Linux — из `build/`.
-
-## Запуск
-
-Примеры для Linux/macOS (в Windows замените путь к исполняемому файлу):
-
-```bash
-# Пошаговый ввод
-./build/ShaftTorsionCalculator
-
-# Загрузка файла с переходом в интерактивный режим
-./build/ShaftTorsionCalculator examples/example1.txt
-
-# Расчёт и завершение
-./build/ShaftTorsionCalculator examples/example1.txt --batch
-
-# Отображение эпюр в Qt
-./build/ShaftTorsionCalculator examples/example1.txt --gui
-
-# Экспорт эпюр в PNG
-./build/ShaftTorsionCalculator examples/example1.txt --batch --png result.png
-```
 
 В интерактивном режиме доступны `help`, `wizard`, `example`, `fixed`, `g`, `mend`, `add`, `edit`, `del`, `clear`, `show`, `calc`, `plot`, `png`, `quit`. Подробный синтаксис — через команду `help`.
 
@@ -95,11 +58,6 @@ CMakeLists.txt             Конфигурация сборки
 docs/images/               Скриншоты
 ```
 
-## Тесты
-
-```bash
-ctest --test-dir build --output-on-failure -C Release
-```
 
 ## Автор
 
