@@ -12,24 +12,6 @@
 
 Нужны CMake ≥ 3.16 и компилятор C++17. Для эпюр - Qt 6 (или Qt 5) с модулем Widgets.
 
-```bash
-cmake -S . -B build
-cmake --build build
-./build/ShaftTorsionCalculator
-```
-
-Если Qt установлен не в системные пути, укажите его:
-
-```bash
-# macOS (Qt из онлайн-установщика или Homebrew)
-cmake -S . -B build -DCMAKE\_PREFIX\_PATH=\~/Qt/6.x.x/macos
-# или: -DCMAKE\_PREFIX\_PATH=$(brew --prefix qt)
-```
-
-Проект открывается в Qt Creator как обычный CMake-проект (File → Open File or Project →
-`CMakeLists.txt`). Параметр `-DWITH\_QT=OFF` принудительно отключает Qt, `-DWITH\_QT=ON`
-требует его наличия. Тесты: `ctest --test-dir build`.
-
 ## Работа с программой
 
 Запуск без параметров начинает **пошаговый ввод**: программа спрашивает, где заделка, модуль сдвига G,
@@ -58,9 +40,9 @@ cmake -S . -B build -DCMAKE\_PREFIX\_PATH=\~/Qt/6.x.x/macos
 |`fix start\|end\|both\|none`|заделка в начале / в конце / с обеих сторон / нет|
 |`g <МПа>`|модуль сдвига G|
 |`mend <Н·м>`|момент в конце вала|
-|`add circle <L> <d> \[M] \[m]`|участок-круг|
-|`add rect <L> <b> <h/b> \[M] \[m]`|прямоугольник|
-|`add tube <L> <D> <d/D> \[M] \[m]`|труба|
+|`add circle <L> <d> \\\[M] \\\[m]`|участок-круг|
+|`add rect <L> <b> <h/b> \\\[M] \\\[m]`|прямоугольник|
+|`add tube <L> <D> <d/D> \\\[M] \\\[m]`|труба|
 |`edit <n> ...` / `del <n>` / `clear`|изменить / удалить участок / удалить все|
 |`show`, `calc`|показать данные, выполнить расчет|
 |`plot`|эпюры в окне Qt (кнопка «Сохранить в PNG...»)|
@@ -84,18 +66,18 @@ cmake -S . -B build -DCMAKE\_PREFIX\_PATH=\~/Qt/6.x.x/macos
 φ(L) = 0, то есть Σ (T⁰ᵢ,ср + X)·Lᵢ/Jkᵢ = 0.
 * Если заделок нет, внешние моменты должны уравновешиваться (Σ M = 0).
 
-Проверка по примеру с сайта (см. выше) совпадает с его результатами; в `tests/test\_solver.cpp` эти
+Проверка по примеру с сайта (см. выше) совпадает с его результатами; в `tests/test\\\_solver.cpp` эти
 значения проверяются автоматически.
 
 ## Структура проекта
 
 ```
-src/TorsionModel.\*      расчет (чистый C++, без Qt)
-src/ConsoleInterface.\*  командный интерфейс
-src/DiagramPainter.\*    рисование схемы и эпюр через QPainter
+src/TorsionModel.\\\*      расчет (чистый C++, без Qt)
+src/ConsoleInterface.\\\*  командный интерфейс
+src/DiagramPainter.\\\*    рисование схемы и эпюр через QPainter
 src/PlotterQt.cpp       окно Qt и экспорт в PNG
 src/PlotterStub.cpp     заглушка при сборке без Qt
-tests/test\_solver.cpp   проверка расчета на задачах с известным ответом
+tests/test\\\_solver.cpp   проверка расчета на задачах с известным ответом
 examples/               примеры входных данных
 ```
 
