@@ -10,24 +10,16 @@ class ConsoleInterface {
 public:
     ConsoleInterface();
 
-    // Интерактивный цикл: читает команды из in до команды quit или конца ввода.
-    // startWithWizard - сначала провести пошаговый ввод данных (и показать результат).
     void run(std::istream& in, std::ostream& out, bool showPrompt, bool startWithWizard = false);
 
-    // Пошаговый ввод: программа задает вопросы, затем считает и показывает эпюры.
-    // false - ввод прерван (конец потока), введенные ранее данные не изменены.
     bool runWizard(std::ostream& out);
 
-    // Выполняет одну команду. Возвращает false, если нужно завершить работу.
     bool execute(const std::string& line, std::ostream& out);
 
-    // Читает команды из файла (формат файла = те же команды). false - файл не открыт.
     bool loadFile(const std::string& path, std::ostream& out);
 
-    // Расчет и печать результатов (для пакетного режима).
     bool calculate(std::ostream& out);
 
-    // Сохранение эпюр в PNG (для пакетного режима).
     bool savePng(const std::string& path, std::ostream& out);
 
     const torsion::Problem& problem() const { return problem_; }
