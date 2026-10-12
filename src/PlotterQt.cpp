@@ -1,5 +1,4 @@
 // Реализация Plotter на Qt: эпюры рисуются через QPainter
-// (в окне - QWidget::paintEvent, в файле - QPainter на QImage).
 #include "Plotter.h"
 
 #include <QApplication>
@@ -34,7 +33,6 @@ bool hasDisplay() {
 #endif
 }
 
-// QApplication создается один раз при первом обращении.
 bool ensureApp(bool needWindow, std::string& error) {
     if (QCoreApplication::instance()) return true;
     if (!hasDisplay()) {
@@ -42,7 +40,7 @@ bool ensureApp(bool needWindow, std::string& error) {
             error = "Графическая оболочка не найдена (нет DISPLAY). Используйте png <файл>.";
             return false;
         }
-        // Сохранение в файл возможно и без экрана.
+        // Сохранение в файл возможно и без экрана
         qputenv("QT_QPA_PLATFORM", "offscreen");
     }
     static QApplication app(gArgc, gArgv);
@@ -62,7 +60,6 @@ bool renderToFile(const torsion::Problem& problem, const torsion::Result& result
     return image.save(path);
 }
 
-// Виджет, который рисует эпюры в paintEvent.
 class DiagramWidget : public QWidget {
 public:
     DiagramWidget(const torsion::Problem& p, const torsion::Result& r, QWidget* parent = nullptr)
@@ -106,7 +103,7 @@ bool showDiagrams(const torsion::Problem& problem, const torsion::Result& result
         if (!path.isEmpty()) renderToFile(problem, result, path);
     });
 
-    // Ждем закрытия окна и возвращаемся в консоль.
+    // Ждем закрытия окна и возвращаемся в консоль
     QEventLoop loop;
     QObject::connect(window, &QObject::destroyed, &loop, &QEventLoop::quit);
     window->resize(1000, 860);
